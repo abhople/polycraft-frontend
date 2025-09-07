@@ -1,70 +1,91 @@
-# Getting Started with Create React App
+# Insurance Specification Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based frontend application that allows users to input insurance specifications and receive AI-powered responses from AWS Bedrock agents.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Text Input Area**: Large textarea for entering detailed insurance specifications
+- **AI Integration**: Connects to backend Bedrock agent endpoint for intelligent responses
+- **Modern UI**: Clean, responsive design with gradient backgrounds and smooth animations
+- **Error Handling**: Comprehensive error handling and user feedback
+- **Loading States**: Visual feedback during API calls
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js (v14 or higher)
+- npm or yarn
+- Backend server running on port 3000 (polycraft-backend)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Setup
 
-### `npm test`
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. **Configure Environment Variables**:
+   Create a `.env` file in the root directory:
+   ```env
+   REACT_APP_AGENT_ID=your-actual-bedrock-agent-id
+   REACT_APP_API_URL=http://localhost:3000
+   ```
 
-### `npm run build`
+3. **Start the Development Server**:
+   ```bash
+   npm start
+   ```
+   
+   The app will run on `http://localhost:3001` (to avoid conflicts with backend on port 3000)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Configuration
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Environment Variables
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `REACT_APP_AGENT_ID`: Your AWS Bedrock agent ID
+- `REACT_APP_API_URL`: Backend API URL (defaults to http://localhost:3000)
 
-### `npm run eject`
+### Backend Endpoint
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The frontend expects the backend to have an `/invoke-agent` endpoint that accepts:
+```json
+{
+  "agentId": "string",
+  "inputText": "string",
+  "sessionId": "string"
+}
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Usage
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. **Enter Insurance Specifications**: Type or paste your insurance requirements in the text area
+2. **Submit Request**: Click "Get AI Response" button
+3. **View Response**: The AI response will appear below the form
+4. **Error Handling**: Any errors will be displayed in red error boxes
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## API Integration
 
-## Learn More
+The frontend makes POST requests to the backend with:
+- **Method**: POST
+- **Endpoint**: `/invoke-agent`
+- **Headers**: Content-Type: application/json
+- **Body**: JSON with agentId, inputText, and sessionId
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Development
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Hot Reloading**: Enabled for development
+- **Responsive Design**: Mobile-friendly layout
+- **Modern CSS**: Uses CSS Grid and Flexbox with smooth transitions
 
-### Code Splitting
+## Troubleshooting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **Port Conflicts**: If port 3001 is busy, the app will automatically suggest an alternative port
+- **Backend Connection**: Ensure the backend server is running on port 3000
+- **Agent ID**: Verify your Bedrock agent ID is correctly set in the .env file
 
-### Analyzing the Bundle Size
+## Build for Production
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+npm run build
+```
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This creates an optimized production build in the `build/` folder.
