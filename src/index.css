@@ -1,16 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-body {
-  margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: #f8fafc;
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  html {
+    height: 100%;
+    background: #0f1020;
+  }
+  
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: #0f1020;
+    color: #e6e9f5;
+  }
+  
+  #root {
+    min-height: 100vh;
+    background: #0f1020;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer utilities {
+  .animate-gradient-slow {
+    animation: gradient-slow 16s ease-in-out infinite;
+  }
+  
+  @keyframes gradient-slow {
+    0% { transform: translate3d(0,0,0); }
+    50% { transform: translate3d(0,-2%,0); }
+    100% { transform: translate3d(0,0,0); }
+  }
+  
+  /* Ensure proper contrast for glass elements */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Fix any potential white backgrounds */
+  .bg-white {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  /* Ensure text contrast */
+  .text-white {
+    color: #e6e9f5 !important;
+  }
+  
+  .text-gray-900 {
+    color: #e6e9f5 !important;
+  }
+  
+  .text-gray-800 {
+    color: #b8bdd5 !important;
+  }
+  
+  .text-gray-700 {
+    color: #b8bdd5 !important;
+  }
+  
+  .text-gray-600 {
+    color: #8f95b2 !important;
+  }
+  
+  .text-gray-500 {
+    color: #8f95b2 !important;
+  }
+  
+  /* Fix any potential white backgrounds */
+  .bg-gray-50 {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+  
+  .bg-gray-100 {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  /* Ensure proper border colors */
+  .border-gray-200 {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .border-gray-300 {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+  }
 }

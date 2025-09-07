@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { Upload, Download, Copy, FileText, CheckCircle, AlertCircle, Sparkles } from 'lucide-react';
 import { generateAndDownloadXMind, validateBedrockInput, exampleBedrockOutput } from '../utils/bedrockToXMind';
-import './XMindConverter.css';
+import GlassCard from './ui/GlassCard';
+import Button from './ui/Button';
+import IconButton from './ui/IconButton';
 
 const XMindConverter = () => {
   const [bedrockInput, setBedrockInput] = useState('');
@@ -50,9 +53,22 @@ const XMindConverter = () => {
     setFilename(e.target.value);
   };
 
-  const handleGenerateXMind = async () => {
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setBedrockInput(event.target.result);
+        const validationResult = validateBedrockInput(event.target.result);
+        setValidation(validationResult);
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const handleGenerate = async () => {
     if (!bedrockInput.trim()) {
-      setError('Please enter some text to convert');
+      setError('Please enter or upload Bedrock output');
       return;
     }
 
@@ -66,10 +82,10 @@ const XMindConverter = () => {
     setSuccess('');
 
     try {
-      const downloadedFilename = await generateAndDownloadXMind(bedrockInput, filename);
-      setSuccess(`✅ XMind file "${downloadedFilename}" has been downloaded successfully!`);
+      await generateAndDownloadXMind(bedrockInput, filename);
+      setSuccess('XMind file generated and downloaded successfully!');
     } catch (err) {
-      setError(`Failed to generate XMind file: ${err.message}`);
+      setError('Failed to generate XMind file: ' + err.message);
     } finally {
       setIsGenerating(false);
     }
@@ -83,124 +99,177 @@ const XMindConverter = () => {
     setSuccess('');
   };
 
-  const handleClear = () => {
-    setBedrockInput('');
-    setFilename('bedrock-output');
-    setError('');
-    setSuccess('');
-    setValidation({ isValid: true, message: '' });
-  };
-
   return (
-    <div className="xmind-converter">
-      <div className="converter-header">
-        <h2>🧠 Bedrock to XMind Converter</h2>
-        <p className="converter-description">
-          Convert your tab-indented Bedrock output into a downloadable XMind mind map file.
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="text-center">
+        <h2 className="text-3xl font-bold text-white mb-2">
+          XMind Converter
+        </h2>
+        <p className="text-text-muted">
+          Convert Bedrock agent output into structured XMind files
         </p>
       </div>
 
-      <div className="input-section">
-        <div className="input-group">
-          <div className="input-header">
-            <label htmlFor="bedrockInput" className="input-label">
-              Bedrock Output (Tab-indented text):
-            </label>
-            {bedrockInput.trim() && (
-              <button
-                onClick={handleCopyInput}
-                className={`copy-input-button ${copySuccess ? 'success' : ''}`}
-                title="Copy input text to clipboard"
+      <div className="lg:grid lg:grid-cols-2 gap-8">
+        {/* Input Card */}
+        <GlassCard>
+          <div className="space-y-6">
+            <div>
+              <label htmlFor="bedrockInput" className="text-sm font-medium text-text-muted">
+                Bedrock Output
+              </label>
+              <textarea
+                id="bedrockInput"
+                value={bedrockInput}
+                onChange={handleInputChange}
+                placeholder="Paste your Bedrock agent output here..."
+                className="mt-2 h-64 w-full resize-y rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[15px] text-white placeholder:text-[#8f95b2] focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-0 transition-all duration-200"
+              />
+              
+              {/* Validation Status */}
+              {bedrockInput && (
+                <div className="mt-2 flex items-center gap-2">
+                  {validation.isValid ? (
+                    <CheckCircle className="w-4 h-4 text-green-400" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 text-red-400" />
+                  )}
+                  <span className={`text-xs ${validation.isValid ? 'text-green-400' : 'text-red-400'}`}>
+                    {validation.message}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* File Upload */}
+            <div>
+              <label className="text-sm font-medium text-text-muted mb-2 block">
+                Or upload a file
+              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  accept=".txt,.json"
+                  onChange={handleFileUpload}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="flex items-center gap-3 p-4 border border-white/10 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+                  <Upload className="w-5 h-5 text-text-muted" />
+                  <span className="text-sm text-text-muted">Click to upload file</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Filename Input */}
+            <div>
+              <label htmlFor="filename" className="text-sm font-medium text-text-muted">
+                Filename (without extension)
+              </label>
+              <input
+                id="filename"
+                type="text"
+                value={filename}
+                onChange={handleFilenameChange}
+                className="mt-2 w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[15px] text-white placeholder:text-[#8f95b2] focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-0 transition-all duration-200"
+                placeholder="Enter filename..."
+              />
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button
+                onClick={handleGenerate}
+                disabled={isGenerating || !bedrockInput.trim() || !validation.isValid}
+                loading={isGenerating}
+                className="flex-1"
               >
-                {copySuccess ? '✅ Copied!' : '📋 Copy Input'}
-              </button>
+                {isGenerating ? (
+                  <>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Generating XMind...
+                  </>
+                ) : (
+                  <>
+                    <Download className="mr-2 h-4 w-4" />
+                    Generate & Download
+                  </>
+                )}
+              </Button>
+              
+              <Button
+                onClick={handleLoadExample}
+                variant="secondary"
+                className="sm:w-auto"
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                Load Example
+              </Button>
+            </div>
+
+            {/* Copy Button */}
+            {bedrockInput && (
+              <div className="flex justify-end">
+                <IconButton
+                  onClick={handleCopyInput}
+                  title="Copy input"
+                  className={copySuccess ? 'bg-green-500/20 border-green-500/40' : ''}
+                >
+                  {copySuccess ? (
+                    <CheckCircle className="w-4 h-4 text-green-400" />
+                  ) : (
+                    <Copy className="w-4 h-4" />
+                  )}
+                </IconButton>
+              </div>
+            )}
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-red-400 text-sm">
+                {error}
+              </div>
+            )}
+
+            {/* Success Message */}
+            {success && (
+              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 text-green-400 text-sm">
+                {success}
+              </div>
             )}
           </div>
-          <textarea
-            id="bedrockInput"
-            value={bedrockInput}
-            onChange={handleInputChange}
-            placeholder="Paste your tab-indented Bedrock output here...
+        </GlassCard>
 
-Example:
-BusinessPropertyInsurance
-	Coverage
-		Rule: FireCoverage
-		Rule: FloodCoverage
-	Exclusions
-		Condition: WearAndTearExcluded"
-            className={`text-input ${!validation.isValid ? 'invalid' : ''}`}
-            rows="12"
-          />
-          {!validation.isValid && (
-            <div className="validation-warning">
-              ⚠️ {validation.message}
+        {/* Preview Card */}
+        <GlassCard>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-text-muted">Input Preview</span>
+              {bedrockInput && (
+                <div className="flex gap-2">
+                  <IconButton title="Copy" onClick={handleCopyInput}>
+                    <Copy className="w-4 h-4" />
+                  </IconButton>
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <div className="filename-group">
-          <label htmlFor="filename" className="input-label">
-            Filename (without extension):
-          </label>
-          <input
-            id="filename"
-            type="text"
-            value={filename}
-            onChange={handleFilenameChange}
-            placeholder="bedrock-output"
-            className="filename-input"
-          />
-        </div>
-      </div>
-
-      <div className="action-buttons">
-        <button
-          onClick={handleGenerateXMind}
-          disabled={isGenerating || !bedrockInput.trim() || !validation.isValid}
-          className="generate-button"
-        >
-          {isGenerating ? '🔄 Generating XMind...' : '📥 Generate & Download XMind'}
-        </button>
-
-        <div className="secondary-buttons">
-          <button
-            onClick={handleLoadExample}
-            className="example-button"
-            disabled={isGenerating}
-          >
-            📋 Load Example
-          </button>
-          <button
-            onClick={handleClear}
-            className="clear-button"
-            disabled={isGenerating}
-          >
-            🗑️ Clear
-          </button>
-        </div>
-      </div>
-
-      {error && (
-        <div className="error-message">
-          ❌ {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="success-message">
-          {success}
-        </div>
-      )}
-
-      <div className="help-section">
-        <h3>💡 How to use:</h3>
-        <ul>
-          <li>Paste your tab-indented text from Bedrock into the text area</li>
-          <li>Make sure the first line is a root-level item (no tabs)</li>
-          <li>Use tabs to create hierarchical structure</li>
-          <li>Click "Generate & Download XMind" to create and download your mind map</li>
-        </ul>
+            <div className="min-h-[300px]">
+              {bedrockInput ? (
+                <pre className="whitespace-pre-wrap text-[15px] leading-6 text-white/95 font-mono bg-white/5 rounded-xl p-4 border border-white/10">
+                  {bedrockInput}
+                </pre>
+              ) : (
+                <div className="flex items-center justify-center h-48 text-text-muted">
+                  <div className="text-center">
+                    <FileText className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <p>Your Bedrock output will appear here</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </GlassCard>
       </div>
     </div>
   );
