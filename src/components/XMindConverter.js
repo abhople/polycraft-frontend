@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, Download, Copy, FileText, CheckCircle, AlertCircle, Sparkles } from 'lucide-react';
 import { generateAndDownloadXMind, validateBedrockInput, exampleBedrockOutput } from '../utils/bedrockToXMind';
 import GlassCard from './ui/GlassCard';
@@ -7,12 +7,22 @@ import IconButton from './ui/IconButton';
 
 const XMindConverter = () => {
   const [bedrockInput, setBedrockInput] = useState('');
-  const [filename, setFilename] = useState('bedrock-output');
+  const [filename, setFilename] = useState('xmind-map-policy');
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [validation, setValidation] = useState({ isValid: true, message: '' });
   const [copySuccess, setCopySuccess] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    // Check for theme preference - check both localStorage and document class
+    const savedTheme = localStorage.getItem('polycraft-theme');
+    const hasLightClass = document.documentElement.classList.contains('light');
+    const isDark = hasLightClass ? false : (savedTheme ? savedTheme === 'dark' : true);
+    console.log('XMindConverter theme detection:', { savedTheme, hasLightClass, isDark, documentClass: document.documentElement.className });
+    setIsDarkMode(isDark);
+  }, []);
 
   const handleCopyInput = async () => {
     if (!bedrockInput.trim()) return;
@@ -82,7 +92,9 @@ const XMindConverter = () => {
     setSuccess('');
 
     try {
-      await generateAndDownloadXMind(bedrockInput, filename);
+      // Ensure filename has .xmind extension
+      const filenameWithExtension = filename.endsWith('.xmind') ? filename : `${filename}.xmind`;
+      await generateAndDownloadXMind(bedrockInput, filenameWithExtension);
       setSuccess('XMind file generated and downloaded successfully!');
     } catch (err) {
       setError('Failed to generate XMind file: ' + err.message);
@@ -103,11 +115,11 @@ const XMindConverter = () => {
     <div className="space-y-8">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-white mb-2">
+        <h2 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-black'}`}>
           XMind Converter
         </h2>
-        <p className="text-text-muted">
-          Convert Bedrock agent output into structured XMind files
+        <p className={`${isDarkMode ? 'text-text-muted' : 'text-black'}`}>
+          Convert Policy Analysis output into structured XMind files
         </p>
       </div>
 
@@ -116,14 +128,17 @@ const XMindConverter = () => {
         <GlassCard>
           <div className="space-y-6">
             <div>
-              <label htmlFor="bedrockInput" className="text-sm font-medium text-text-muted">
-                Bedrock Output
+              <label htmlFor="bedrockInput" className={`text-sm font-medium ${isDarkMode ? 'text-text-muted' : 'text-black'}`}>
+                Policy Analysis output
               </label>
+              <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+                Paste your policy analysis results here to convert them into structured XMind mind maps
+              </p>
               <textarea
                 id="bedrockInput"
                 value={bedrockInput}
                 onChange={handleInputChange}
-                placeholder="Paste your Bedrock agent output here..."
+                placeholder="Paste your policy analysis output here..."
                 className="mt-2 h-64 w-full resize-y rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-[15px] text-white placeholder:text-[#8f95b2] focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-0 transition-all duration-200"
               />
               
@@ -144,9 +159,12 @@ const XMindConverter = () => {
 
             {/* File Upload */}
             <div>
-              <label className="text-sm font-medium text-text-muted mb-2 block">
+              <label className={`text-sm font-medium mb-1 block ${isDarkMode ? 'text-text-muted' : 'text-black'}`}>
                 Or upload a file
               </label>
+              <p className={`text-xs mb-2 ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+                Upload TXT or JSON files containing policy analysis data
+              </p>
               <div className="relative">
                 <input
                   type="file"
@@ -155,17 +173,20 @@ const XMindConverter = () => {
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
                 <div className="flex items-center gap-3 p-4 border border-white/10 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
-                  <Upload className="w-5 h-5 text-text-muted" />
-                  <span className="text-sm text-text-muted">Click to upload file</span>
+                  <Upload className={`w-5 h-5 ${isDarkMode ? 'text-text-muted' : 'text-gray-600'}`} />
+                  <span className={`text-sm ${isDarkMode ? 'text-text-muted' : 'text-gray-600'}`}>Click to upload file</span>
                 </div>
               </div>
             </div>
 
             {/* Filename Input */}
             <div>
-              <label htmlFor="filename" className="text-sm font-medium text-text-muted">
+              <label htmlFor="filename" className={`text-sm font-medium ${isDarkMode ? 'text-text-muted' : 'text-black'}`}>
                 Filename (without extension)
               </label>
+              <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+                Choose a name for your XMind file - .xmind extension will be added automatically
+              </p>
               <input
                 id="filename"
                 type="text"
@@ -244,7 +265,12 @@ const XMindConverter = () => {
         <GlassCard>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-text-muted">Input Preview</span>
+              <div>
+                <span className={`text-sm ${isDarkMode ? 'text-text-muted' : 'text-black'}`}>Input Preview</span>
+                <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-500' : 'text-gray-600'}`}>
+                  Preview your input data before converting to XMind format
+                </p>
+              </div>
               {bedrockInput && (
                 <div className="flex gap-2">
                   <IconButton title="Copy" onClick={handleCopyInput}>
@@ -256,14 +282,20 @@ const XMindConverter = () => {
 
             <div className="min-h-[300px]">
               {bedrockInput ? (
-                <pre className="whitespace-pre-wrap text-[15px] leading-6 text-white/95 font-mono bg-white/5 rounded-xl p-4 border border-white/10">
+                <pre 
+                  className="whitespace-pre-wrap text-[15px] leading-6 font-mono bg-white/5 rounded-xl p-4 border border-white/10" 
+                  style={{
+                    color: isDarkMode ? '#ffffff !important' : '#000000 !important',
+                    backgroundColor: 'rgba(255, 255, 255, 0.05) !important'
+                  }}
+                >
                   {bedrockInput}
                 </pre>
               ) : (
-                <div className="flex items-center justify-center h-48 text-text-muted">
+                <div className={`flex items-center justify-center h-48 ${isDarkMode ? 'text-text-muted' : 'text-black'}`}>
                   <div className="text-center">
                     <FileText className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p>Your Bedrock output will appear here</p>
+                    <p>Your Policy Analysis output will appear here</p>
                   </div>
                 </div>
               )}

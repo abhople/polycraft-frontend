@@ -1,0 +1,25 @@
+   NextGen Retail Cyber Liability Policy
+
+   Coverage:
+   Protects the business against first-party losses such as data loss, system interruptions, ransomware attacks, and any business interruptions caused by cyber incidents.
+   Covers third-party liabilities, including privacy breaches, regulatory fines, and legal defense costs.
+   Includes coverage for extortion threats and the costs required to hire forensic experts.
+   Offers optional coverage for reputational harm and crisis management support.
+
+   Exclusions:
+   Does not cover losses resulting from known vulnerabilities that were left unpatched for more than 30 days.
+   Excludes losses caused by employees acting maliciously or fraudulently.
+   Acts of war or terrorism, including cyber-terrorism, are excluded unless specifically endorsed in the policy.
+   Claims arising from prior known incidents disclosed before the policy start date are not covered.
+
+   Limits:
+   Aggregate limit of $20,000,000 per policy period.
+   Per incident limit of $5,000,000.
+   Sub-limits: $1,000,000 for reputational harm, $500,000 for regulatory fines.
+   Deductibles: $50,000 per incident, $100,000 specifically for ransomware payouts.
+
+   Conditions:
+   Insured must implement multi-factor authentication and conduct regular security audits.
+   All cyber incidents must be reported immediately, within 24 hours.
+   Compliance with ISO 27001 or NIST cybersecurity frameworks is recommended for full coverage.
+   Annual penetration testing is required for all critical systems.

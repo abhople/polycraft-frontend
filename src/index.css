@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
   * {
@@ -11,24 +12,40 @@
   
   html {
     height: 100%;
-    background: #0f1020;
+    background: #1a1a1a;
+  }
+  
+  html.light {
+    background: #ffffff;
   }
   
   body {
     margin: 0;
     min-height: 100vh;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
+    font-family: 'BattersonSans', 'Source Sans Pro', 'Open Sans', 'Arial', 'Helvetica Neue', 'Helvetica', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #0f1020;
-    color: #e6e9f5;
+    background: #1a1a1a;
+    color: #ffffff;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  
+  html.light body {
+    background: #ffffff;
+    color: #333333;
   }
   
   #root {
     min-height: 100vh;
-    background: #0f1020;
+    background: #1a1a1a;
+    transition: all 0.3s ease;
+  }
+  
+  html.light #root {
+    background: #ffffff;
   }
 
   code {
@@ -48,12 +65,25 @@
     100% { transform: translate3d(0,0,0); }
   }
   
-  /* Ensure proper contrast for glass elements */
+  /* Travelers-inspired professional cards */
   .glass-card {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  html.light .glass-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      0 1px 3px rgba(0, 0, 0, 0.08);
   }
   
   /* Fix any potential white backgrounds */
@@ -61,29 +91,53 @@
     background-color: rgba(255, 255, 255, 0.1) !important;
   }
   
-  /* Ensure text contrast */
+  /* Travelers-inspired professional text colors */
   .text-white {
-    color: #e6e9f5 !important;
+    color: #ffffff !important;
+  }
+  
+  html.light .text-white {
+    color: #1a1a1a !important;
   }
   
   .text-gray-900 {
-    color: #e6e9f5 !important;
+    color: #ffffff !important;
+  }
+  
+  html.light .text-gray-900 {
+    color: #1a1a1a !important;
   }
   
   .text-gray-800 {
-    color: #b8bdd5 !important;
+    color: #e0e0e0 !important;
+  }
+  
+  html.light .text-gray-800 {
+    color: #1a1a1a !important;
   }
   
   .text-gray-700 {
-    color: #b8bdd5 !important;
+    color: #b0b0b0 !important;
+  }
+  
+  html.light .text-gray-700 {
+    color: #2d2d2d !important;
   }
   
   .text-gray-600 {
-    color: #8f95b2 !important;
+    color: #999999 !important;
+  }
+  
+  html.light .text-gray-600 {
+    color: #404040 !important;
   }
   
   .text-gray-500 {
-    color: #8f95b2 !important;
+    color: #999999 !important;
+  }
+  
+  html.light .text-gray-500 {
+    color: #666666 !important;
   }
   
   /* Fix any potential white backgrounds */
@@ -102,5 +156,131 @@
   
   .border-gray-300 {
     border-color: rgba(255, 255, 255, 0.15) !important;
+  }
+  
+  /* Travelers-style professional form elements */
+  input, textarea {
+    font-family: 'BattersonSans', 'Source Sans Pro', 'Open Sans', 'Arial', 'Helvetica Neue', 'Helvetica', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 400;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Dark theme form elements */
+  input, textarea {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+  }
+  
+  input::placeholder, textarea::placeholder {
+    color: #b0b0b0 !important;
+  }
+  
+  input:focus, textarea:focus {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: #0066cc !important;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.3);
+  }
+  
+  /* Light theme form elements */
+  html.light input, html.light textarea {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: #1a1a1a !important;
+  }
+  
+  html.light input::placeholder, html.light textarea::placeholder {
+    color: #000000 !important;
+  }
+  
+  html.light input:focus, html.light textarea:focus {
+    background-color: #ffffff !important;
+    border-color: #0066cc !important;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  }
+  
+  /* Travelers-style buttons */
+  button {
+    font-family: 'BattersonSans', 'Source Sans Pro', 'Open Sans', 'Arial', 'Helvetica Neue', 'Helvetica', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 400;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Light theme backgrounds with better contrast */
+  html.light .bg-white {
+    background-color: #ffffff !important;
+  }
+  
+  html.light .bg-gray-50 {
+    background-color: #f9fafb !important;
+  }
+  
+  html.light .bg-gray-100 {
+    background-color: #f3f4f6 !important;
+  }
+  
+  html.light .bg-gray-200 {
+    background-color: #e5e7eb !important;
+  }
+  
+  html.light .bg-blue-50 {
+    background-color: #eff6ff !important;
+  }
+  
+  html.light .bg-blue-100 {
+    background-color: #dbeafe !important;
+  }
+  
+  /* Light theme segmented tabs */
+  html.light .light\:bg-gray-100 {
+    background-color: #f3f4f6 !important;
+  }
+  
+  html.light .light\:border-gray-300 {
+    border-color: #d1d5db !important;
+  }
+  
+  html.light .light\:bg-white {
+    background-color: #ffffff !important;
+  }
+  
+  html.light .light\:text-gray-900 {
+    color: #1a1a1a !important;
+  }
+  
+  html.light .light\:text-gray-600 {
+    color: #4b5563 !important;
+  }
+  
+  html.light .light\:hover\:text-gray-900:hover {
+    color: #1a1a1a !important;
+  }
+  
+  html.light .light\:hover\:bg-gray-50:hover {
+    background-color: #f9fafb !important;
+  }
+  
+  html.light .light\:border {
+    border-width: 1px !important;
+  }
+  
+  html.light .light\:border-gray-200 {
+    border-color: #e5e7eb !important;
+  }
+
+  /* Force white text for Craft My Policy button */
+  .craft-policy-button {
+    color: #ffffff !important;
+  }
+  
+  html.light .craft-policy-button {
+    color: #ffffff !important;
   }
 }

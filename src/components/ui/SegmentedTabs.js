@@ -8,7 +8,7 @@ const SegmentedTabs = ({ activeTab, onTabChange }) => {
   ];
 
   return (
-    <div className="flex gap-1 p-1 bg-white/10 backdrop-blur-xl rounded-xl border border-white/10">
+    <div className="flex gap-1 p-1 bg-white/10 backdrop-blur-xl rounded-xl border border-white/10 light:bg-gray-100 light:border-gray-300">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
@@ -20,8 +20,8 @@ const SegmentedTabs = ({ activeTab, onTabChange }) => {
             className={`
               flex items-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200
               ${isActive 
-                ? 'bg-white/10 backdrop-blur shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)] text-white' 
-                : 'text-text-muted hover:text-white hover:bg-white/5'
+                ? 'bg-white/10 backdrop-blur shadow-[inset_0_0_0_1px_rgba(255,255,255,0.12)] text-white light:bg-white light:shadow-md light:text-gray-900 light:border light:border-gray-200' 
+                : 'text-text-muted hover:text-white hover:bg-white/5 light:text-gray-600 light:hover:text-gray-900 light:hover:bg-gray-50'
               }
             `}
             aria-pressed={isActive}
