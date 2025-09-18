@@ -398,7 +398,7 @@ Annual penetration testing is required for all critical systems.`
               Polycraft
             </h1>
             <p className={`mt-4 text-lg md:text-xl font-normal ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-              Craftsmanship Behind Great Insurance Products
+              The Craftsmanship Behind Great Insurance Products
             </p>
             
             {/* Minimalist Help Instructions */}
